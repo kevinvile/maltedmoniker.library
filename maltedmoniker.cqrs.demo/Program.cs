@@ -31,7 +31,7 @@ namespace maltedmoniker.cqrs.demo
         {
             IServiceCollection services = new ServiceCollection();
             return services
-                .AddCQRS(typeof(Program).Assembly);
+                .AddDispatching(typeof(Program).Assembly);
         }
 
         private static AddNumbersCommand AddNumbers(int a, int b) => new AddNumbersCommand(a, b);

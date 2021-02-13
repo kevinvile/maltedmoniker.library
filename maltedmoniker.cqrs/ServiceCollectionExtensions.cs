@@ -8,7 +8,7 @@ namespace maltedmoniker.cqrs
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddCQRS(this IServiceCollection services, IEnumerable<Assembly> assemblies)
+        public static IServiceCollection AddDispatching(this IServiceCollection services, IEnumerable<Assembly> assemblies)
         {
             services.AddDispatcher();
             foreach(var assembly in assemblies)
@@ -18,15 +18,15 @@ namespace maltedmoniker.cqrs
             return services;
         }
 
-        public static IServiceCollection AddCQRS(this IServiceCollection services, Assembly assembly)
+        public static IServiceCollection AddDispatching(this IServiceCollection services, Assembly assembly)
             => services
                 .AddDispatcher()
                 .AddHandlers(assembly);
         
-        public static IServiceCollection AddDispatcher(this IServiceCollection services)
+        private static IServiceCollection AddDispatcher(this IServiceCollection services)
             => services.AddScoped<IDispatcher, Dispatcher>();
-            
-        public static IServiceCollection AddHandlers(this IServiceCollection services, Assembly assembly)
+
+        private static IServiceCollection AddHandlers(this IServiceCollection services, Assembly assembly)
             => services
                 .LoadGenericsFromAssemblyOfType(assembly, typeof(IHandler<,>))
                 .LoadGenericsFromAssemblyOfType(assembly, typeof(IHandlerSync<,>))
