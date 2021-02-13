@@ -19,9 +19,9 @@ namespace maltedmoniker.cqrs.demo
             dispatcher = provider.GetRequiredService<IDispatcher>();
 
             var command = AddNumbers(1, 5);
+
             var initialCommandResult = await dispatcher.ExecuteAsync<AddNumbersCommand, int>(command);
-            var result = await initialCommandResult
-                .MapToResultAsync(SuccessfulAdditionOfNumbers);
+            var result = await initialCommandResult.MapToResultAsync(SuccessfulAdditionOfNumbers);
 
             result.DoWhenSuccessful(() => Console.WriteLine("Unexpectedly, we didn't break anything!"));
             result.DoWhenError(HandleError);
