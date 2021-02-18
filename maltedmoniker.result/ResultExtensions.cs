@@ -25,26 +25,26 @@ namespace maltedmoniker.result
                 ? await map(some) 
             : (ResultsError)(Error<T>)result;
 
-        public static Task DoWhenSuccessfulAsync<T>(this Result<T> result, Func<T, Task> map)
-            => result is Success<T> some 
-                ? map(some) 
-                : Task.CompletedTask;
-
-        public static void DoWhenSuccessful<T>(this Result<T> result, Action<T> map)
+        public static async Task<Result<T>> DoWhenSuccessfulAsync<T>(this Result<T> result, Func<T, Task> map)
         {
-            if (result is not Success<T> some) return;
-            map(some);
+            if (result is Success<T> some) await map(some);
+            return result;
+        }
+        public static Result<T> DoWhenSuccessful<T>(this Result<T> result, Action<T> map)
+        {
+            if (result is Success<T> some) map(some);
+            return result;
         }
 
-        public static Task DoWhenErrorAsync<T>(this Result<T> result, Func<ResultsError, Task> map)
-            => result is Error<T> error 
-                ? map(error) 
-                : Task.CompletedTask;
-
-        public static void DoWhenError<T>(this Result<T> result, Action<ResultsError> map)
+        public static async Task<Result<T>> DoWhenErrorAsync<T>(this Result<T> result, Func<ResultsError, Task> map)
         {
-            if (result is not Error<T> error) return;
-            map(error);
+            if (result is Error<T> error) await map(error);
+            return result;
+        }
+        public static Result<T> DoWhenError<T>(this Result<T> result, Action<ResultsError> map)
+        {
+            if (result is Error<T> error) map(error);
+            return result;
         }
 
         public static T Reduce<T>(this Result<T> result, T whenError)
@@ -96,26 +96,27 @@ namespace maltedmoniker.result
                 ? await map(success)
                 : result;
 
-        public static Task DoWhenSuccessful(this Result result, Func<Task> map)
-            => result is Success 
-                ? map() 
-                : Task.CompletedTask;
-
-        public static void DoWhenSuccessful(this Result result, Action map)
+        public static async Task<Result> DoWhenSuccessfulAsync(this Result result, Func<Task> map)
         {
-            if (result is not Success) return;
-            map();
+            if (result is Success) await map();
+            return result;
         }
 
-        public static Task DoWhenErrorAsync(this Result result, Func<ResultsError, Task> map)
-            => result is Error error 
-                ? map(error) 
-                : Task.CompletedTask;
-
-        public static void DoWhenError(this Result result, Action<ResultsError> map)
+        public static Result DoWhenSuccessful(this Result result, Action map)
         {
-            if (result is not Error error) return;
-            map(error);
+            if (result is  Success) map();
+            return result;
+        }
+
+        public static async Task<Result> DoWhenErrorAsync(this Result result, Func<ResultsError, Task> map)
+        {
+            if (result is Error error) await map(error);
+            return result;
+        }
+        public static Result DoWhenError(this Result result, Action<ResultsError> map)
+        {
+            if (result is Error error) map(error);
+            return result;
         }
 
     }
