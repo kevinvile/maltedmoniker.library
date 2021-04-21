@@ -1,4 +1,6 @@
-﻿namespace maltedmoniker.result
+﻿using System;
+
+namespace maltedmoniker.result
 {
     public abstract class ResultsError
     {
@@ -7,6 +9,17 @@
         protected ResultsError(string message)
         {
             Message = message;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is ResultsError error &&
+                   Message == error.Message;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Message);
         }
     }
 

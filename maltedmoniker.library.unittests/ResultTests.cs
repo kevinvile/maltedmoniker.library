@@ -8,7 +8,7 @@ namespace maltedmoniker.library.unittests
     public class ResultTests
     {
         [Fact]
-        public void Test1()
+        public void Result_Test1()
         {
             ResultsError error = ResultsNotFound.Default;
             object f = new { };
@@ -24,6 +24,41 @@ namespace maltedmoniker.library.unittests
 
         }
 
-        
+        [Fact]
+        public void Result_Test2()
+        {
+            Result r = Result.Success();
+            Result e = ResultsCustomError.Default("anything");
+            Result e2 = ResultsCustomError.Default("anything");
+
+            r.Should().Be(Result.Success());
+            r.Should().NotBe(e);
+
+            e.Should().Be(e2);
+            e.Should().NotBe(r);
+            
+        }
+
+        [Fact]
+        public void Optional_Test1()
+        {
+            Optional<string> optional = None.Value;
+
+            optional.Should().Be((Optional<string>)None.Value);
+            optional.Should().NotBe((Optional<int>)None.Value);
+            optional.Should().Be(None.Value);
+        }
+
+        [Fact]
+        public void Optional_Test2()
+        {
+            Optional<string> optional = "hello";
+            var other = (Optional<string>)"hello";
+            var other2 = (Optional<string>)"something else";
+            object.Equals(optional, other).Should().BeTrue();
+            optional.Should().Be(other);
+            optional.Should().NotBe(other2);
+            optional.Should().NotBe("hello");
+        }
     }
 }

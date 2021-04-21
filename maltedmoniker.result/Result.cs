@@ -1,4 +1,7 @@
-﻿namespace maltedmoniker.result
+﻿using System;
+using System.Collections.Generic;
+
+namespace maltedmoniker.result
 {
     public abstract class Result
     {
@@ -7,6 +10,16 @@
 
         public static implicit operator Result(ResultsError error)
             => new Error(error);
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is null) return false;
+            if (obj is not Result) return false;
+            if (obj is Success && this is Success) return true;
+            if (obj is Error a && this is Error b) return a.Equals(b);
+
+            return false;
+        }
     }
 
     public sealed class Error : Result
@@ -18,9 +31,19 @@
             Value = value;
         }
 
-
         public static implicit operator ResultsError(Error obj)
             => obj.Value;
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Error error &&
+                   EqualityComparer<ResultsError>.Default.Equals(Value, error.Value);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Value);
+        }
     }
 
     public class Success : Result
