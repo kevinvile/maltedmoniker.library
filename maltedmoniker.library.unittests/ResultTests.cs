@@ -40,6 +40,15 @@ namespace maltedmoniker.library.unittests
         }
 
         [Fact]
+        public void Result_Test3()
+        {
+            Result<string> r = Result<string>.Make("hey there");
+            Result<string> r2 = Result<string>.Make("hey there");
+
+            r.Should().Be(r2);
+        }
+
+        [Fact]
         public void Optional_Test1()
         {
             Optional<string> optional = None.Value;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace maltedmoniker.result
 {
-    public abstract class Result
+    public abstract class Result : IEquatable<Result>
     {
         public static Result Success()
             => new Success();
@@ -14,9 +14,21 @@ namespace maltedmoniker.result
         public override bool Equals(object? obj)
         {
             if (obj is null) return false;
-            if (obj is not Result) return false;
-            if (obj is Success && this is Success) return true;
-            if (obj is Error a && this is Error b) return a.Equals(b);
+            if (obj is Result res) return Equals(res);
+
+            return false;
+            
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public bool Equals(Result? other)
+        {
+            if (other is Success && this is Success) return true;
+            if (other is Error a && this is Error b) return a.Equals(b);
 
             return false;
         }
@@ -42,7 +54,7 @@ namespace maltedmoniker.result
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Value);
+            return HashCode.Combine(base.GetHashCode(), Value);
         }
     }
 
@@ -51,7 +63,7 @@ namespace maltedmoniker.result
 
     }
 
-    public abstract class Result<T>
+    public abstract class Result<T> : IEquatable<Result<T>>
     {
         public static Result<T> Make(T obj)
             => new Success<T>(obj);
@@ -68,6 +80,25 @@ namespace maltedmoniker.result
         public static implicit operator Error(Result<T> result)
             => result is Error err ? err : default!;
 
+        public override bool Equals(object? obj)
+        {
+            if (obj is null) return false;
+            if (obj is Result<T> res) return Equals(res);
+            
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public bool Equals(Result<T>? other)
+        {
+            if (other is Success<T> sA && this is Success<T> sB) return sA.Equals(sB);
+            if (other is Error<T> a && this is Error<T> b) return a.Equals(b);
+            return false;
+        }
     }
 
     public sealed class Error<T> : Result<T>
@@ -77,6 +108,17 @@ namespace maltedmoniker.result
         public Error(ResultsError error)
         {
             Value = error;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Error<T> error &&
+                   EqualityComparer<ResultsError>.Default.Equals(Value, error.Value);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(base.GetHashCode(), Value);
         }
 
         public static implicit operator ResultsError(Error<T> obj)
@@ -90,6 +132,17 @@ namespace maltedmoniker.result
         public Success(T content)
         {
             Content = content;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Success<T> success &&
+                   EqualityComparer<T>.Default.Equals(Content, success.Content);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(base.GetHashCode(), Content);
         }
 
         public static implicit operator T(Success<T> obj)

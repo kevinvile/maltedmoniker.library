@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace maltedmoniker.result
 {
-    public abstract class Optional<T>
+    public abstract class Optional<T> : IEquatable<Optional<T>>
     {
         public static implicit operator Optional<T>(T value)
             => value is not null 
@@ -16,17 +16,14 @@ namespace maltedmoniker.result
         public override bool Equals(object? obj)
         {
             if (obj is null) return false;
-            if (obj is Optional<T> optional)
-            {
-                if (optional is None<T> && this is None<T>) return true;
-                if (optional is Some<T> a && this is Some<T> b) return a.Equals(b);
-            }
+            if (obj is Optional<T> optional) return Equals(optional);
+            
             return false;
         }
 
         public override int GetHashCode()
         {
-            int hash = 13;
+            int hash = base.GetHashCode();
 
             if (this is Some<T> a)
             {
@@ -34,6 +31,13 @@ namespace maltedmoniker.result
             }
 
             return hash;
+        }
+
+        public bool Equals(Optional<T>? other)
+        {
+            if (other is None<T> && this is None<T>) return true;
+            if (other is Some<T> a && this is Some<T> b) return a.Equals(b);
+            return false;
         }
     }
 
@@ -55,9 +59,10 @@ namespace maltedmoniker.result
                    EqualityComparer<T>.Default.Equals(Content, some.Content);
         }
 
+
         public override int GetHashCode()
         {
-            return HashCode.Combine(Content);
+            return HashCode.Combine(base.GetHashCode(), Content);
         }
     }
 
@@ -69,6 +74,11 @@ namespace maltedmoniker.result
             if (obj is None<T>) return true;
 
             return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 
