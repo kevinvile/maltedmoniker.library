@@ -49,6 +49,24 @@ namespace maltedmoniker.library.unittests
         }
 
         [Fact]
+        public void Error_Test1()
+        {
+            Result r = ResultsCustomError.Default("");
+            Result r2 = ResultsCustomError.Default("");
+
+            r.Should().Be(r2);
+        }
+
+        [Fact]
+        public void Error_Test2()
+        {
+            Result<string> r = ResultsCustomError.Default("");
+            Result<string> r2 = ResultsCustomError.Default("");
+
+            r.Should().Be(r2);
+        }
+
+        [Fact]
         public void Optional_Test1()
         {
             Optional<string> optional = None.Value;
