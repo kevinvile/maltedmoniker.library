@@ -16,8 +16,8 @@ namespace maltedmoniker.result
         public override bool Equals(object? obj)
         {
             if (obj is null) return false;
-            if (obj is Optional<T> optional) return Equals(optional);
-            
+            if (obj is Optional<T> optional) Equals(this, optional);
+
             return false;
         }
 
@@ -33,11 +33,16 @@ namespace maltedmoniker.result
             return hash;
         }
 
+        private static bool Equals(Optional<T> first, Optional<T>? second)
+        {
+            if (second is None<T> && first is None<T>) return true;
+            if (second is Some<T> a && first is Some<T> b) return a.Equals(b);
+            return false;
+        }
+
         public bool Equals(Optional<T>? other)
         {
-            if (other is None<T> && this is None<T>) return true;
-            if (other is Some<T> a && this is Some<T> b) return a.Equals(b);
-            return false;
+            return Equals(this, other);
         }
     }
 

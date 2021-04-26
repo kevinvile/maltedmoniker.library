@@ -49,6 +49,22 @@ namespace maltedmoniker.library.unittests
         }
 
         [Fact]
+        public void Result_Test4()
+        {
+            Result<long> r = Result<long>.Make(1);
+            Result<long> r2 = Result<long>.Make(1);
+            Result<long> r3 = (Result<long>)ResultsForbidden.Default;
+            Result<long> r4 = (Result<long>)ResultsForbidden.Default;
+
+            r.Should().Be(r2);
+            r.Should().NotBe(r3);
+            r.Should().NotBe(r4);
+            r3.Should().Be(r4);
+            r3.Should().NotBe(r);
+            r3.Should().NotBe(r2);
+        }
+
+        [Fact]
         public void Error_Test1()
         {
             Result r = ResultsCustomError.Default("");
@@ -87,5 +103,7 @@ namespace maltedmoniker.library.unittests
             optional.Should().NotBe(other2);
             optional.Should().NotBe("hello");
         }
+
+        
     }
 }
