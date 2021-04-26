@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace maltedmoniker.result
 {
@@ -46,7 +47,7 @@ namespace maltedmoniker.result
         }
     }
 
-    public sealed class Some<T> : Optional<T>
+    public sealed class Some<T> : Optional<T>, IEquatable<Some<T>>
     {
         private T Content { get; }
 
@@ -61,9 +62,19 @@ namespace maltedmoniker.result
         public override bool Equals(object? obj)
         {
             return obj is Some<T> some &&
-                   EqualityComparer<T>.Default.Equals(Content, some.Content);
+                   InternalEquals(some);
         }
 
+        public bool Equals(Some<T>? other)
+        {
+            return InternalEquals(other);
+        }
+
+        private bool InternalEquals(Some<T>? second)
+        {
+            return second is Some<T> some &&
+                   EqualityComparer<T>.Default.Equals(Content, some.Content);
+        }
 
         public override int GetHashCode()
         {

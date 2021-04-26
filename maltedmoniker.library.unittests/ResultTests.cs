@@ -104,6 +104,15 @@ namespace maltedmoniker.library.unittests
             optional.Should().NotBe("hello");
         }
 
-        
+        [Fact]
+        public void Optional_Test3()
+        {
+            Result<Optional<string>> test = (Optional<string>)"hi";
+            Result<Optional<string>> test2 = (Optional<string>)"hi";
+
+            object.Equals(test, test2).Should().BeTrue();
+            test.Equals(test2).Should().BeTrue();
+            test.Should().Be(test2);
+        }
     }
 }
