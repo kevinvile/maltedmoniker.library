@@ -88,7 +88,7 @@ namespace maltedmoniker.result
             => new Error<T>(error);
 
         public static implicit operator Error(Result<T> result)
-            => result is Error err ? err : default!;
+            => result is Error<T> err ? err : default!;
 
         public override bool Equals(object? obj)
         {
@@ -140,6 +140,9 @@ namespace maltedmoniker.result
             return second is Error<T> error &&
                    EqualityComparer<ResultsError>.Default.Equals(Value, error.Value);
         }
+
+        public static implicit operator Error(Error<T> result)
+            => new (result.Value);
 
         public static implicit operator ResultsError(Error<T> obj)
             => obj.Value;

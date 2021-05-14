@@ -25,6 +25,11 @@ namespace maltedmoniker.result
                 ? await map(some) 
             : (ResultsError)(Error<T>)result;
 
+        public static async Task<Result> MapToResultAsync<T, TResult>(this Result<T> result, Func<T, Task<Result>> map)
+            => result is Success<T> some
+                ? await map(some)
+            : result;
+
         public static async Task<Result<T>> DoWhenSuccessfulAsync<T>(this Result<T> result, Func<T, Task> map)
         {
             if (result is Success<T> some) await map(some);

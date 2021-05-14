@@ -1,6 +1,7 @@
 using FluentAssertions;
 using maltedmoniker.result;
 using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace maltedmoniker.library.unittests
@@ -62,6 +63,23 @@ namespace maltedmoniker.library.unittests
             r3.Should().Be(r4);
             r3.Should().NotBe(r);
             r3.Should().NotBe(r2);
+        }
+
+        [Fact]
+        public async Task Result_Test5()
+        {
+            Result<long> r = ResultsCustomError.Default("error");
+            var r2 = await r.MapToResultAsync(async l =>
+            {
+                if (true == false)
+                {
+                    await Task.Delay(10);
+                }
+                return Result.Success();
+            });
+
+            r2.Should().NotBeNull();
+            r2.Should().Be((Result)ResultsCustomError.Default("error"));
         }
 
         [Fact]
