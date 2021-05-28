@@ -32,17 +32,30 @@ namespace maltedmoniker.result
         public static bool HasNoValue<T>(this Optional<T> option)
             => !option.HasValue();
 
-        public static T? EscapeToNullable<T>(this Optional<T> option)
+        public static DateTime? EscapeToNullable(this Optional<DateTime> option)
+            => option
+                .MapToNullable()
+                .ReduceToValue((DateTime?)null);
+
+        public static DateTime? EscapeToNullable(this Optional<DateTime> option, Action whenNull)
+           => option
+               .MapToNullable()
+               .ReduceToValue(InvokeAndReturn<DateTime?>(whenNull));
+
+        private static Optional<DateTime?> MapToNullable(this Optional<DateTime> option)
+            => option.Map<DateTime, DateTime?>(o => o);
+
+        public static T? EscapeToNullable<T>(this Optional<T> option) //where T : class
             => option
                 .MapToNullable()
                 .ReduceToValue(default(T?));
 
-        public static T? EscapeToNullable<T>(this Optional<T> option, Action whenNull)
+        public static T? EscapeToNullable<T>(this Optional<T> option, Action whenNull) //where T : class
             => option
                 .MapToNullable()
                 .ReduceToValue(InvokeAndReturn<T?>(whenNull));
 
-        private static Optional<T?> MapToNullable<T>(this Optional<T> option)
+        private static Optional<T?> MapToNullable<T>(this Optional<T> option) //where T : class
             => option.Map<T, T?>(o => o);
 
         private static Func<T?> InvokeAndReturn<T>(Action invoke)

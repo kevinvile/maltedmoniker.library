@@ -132,5 +132,36 @@ namespace maltedmoniker.library.unittests
             test.Equals(test2).Should().BeTrue();
             test.Should().Be(test2);
         }
+
+        [Fact]
+        public void Optional_Test4()
+        {
+            Optional<string> myValue = None.Value;
+            string? result = myValue.EscapeToNullable();
+
+            result.Should().NotBe(string.Empty);
+            result.Should().BeNull();
+
+            string? result2 = myValue.EscapeToNullable(() => { });
+
+            result2.Should().NotBe(string.Empty);
+            result2.Should().BeNull();
+        }
+
+
+        [Fact]
+        public void Optional_Test5()
+        {
+            Optional<DateTime> myDate = None.Value;
+            DateTime? result = myDate.EscapeToNullable();
+
+            result.Should().NotBe(default);
+            result.Should().BeNull();
+
+            DateTime? result2 = myDate.EscapeToNullable(() => { });
+
+            result2.Should().NotBe(default);
+            result2.Should().BeNull();
+        }
     }
 }
