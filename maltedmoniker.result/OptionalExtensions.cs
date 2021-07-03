@@ -42,8 +42,7 @@ namespace maltedmoniker.result
                .MapToNullable()
                .ReduceToValue(InvokeAndReturn<DateTime?>(whenNull));
 
-        private static Optional<DateTime?> MapToNullable(this Optional<DateTime> option)
-            => option.Map<DateTime, DateTime?>(o => o);
+        
 
         public static T? EscapeToNullable<T>(this Optional<T> option) //where T : class
             => option
@@ -54,6 +53,28 @@ namespace maltedmoniker.result
             => option
                 .MapToNullable()
                 .ReduceToValue(InvokeAndReturn<T?>(whenNull));
+
+        public static Result<T> MapToResult<T>(this Optional<Result<T>> optionalResult, string errorMessage)
+            => optionalResult.ReduceToValue(ResultsCustomError.Default(errorMessage));
+
+        public static Result MapToResult(this Optional<Result> optionalResult, string errorMessage)
+            => optionalResult.ReduceToValue(ResultsCustomError.Default(errorMessage));
+
+        public static Task<Result> MapToResultAsync<T>(this Optional<T> optional, Func<T, Task<Result>> mapper, string errorMessage)
+            => optional is Some<T> some
+                ? mapper.Invoke((T)some)
+                : Task.FromResult((Result)ResultsCustomError.Default(errorMessage));
+
+        public static Result<T> MapToResult<T>(this Optional<T> optional, string errorMessage = "No value found.")
+           => optional.MapToResult(ResultsCustomError.Default(errorMessage));
+
+        public static Result<T> MapToResult<T>(this Optional<T> optional, ResultsError error)
+            => optional
+                .MapToOption(value => Result<T>.Make(value))
+                .ReduceToValue(error);
+
+        private static Optional<DateTime?> MapToNullable(this Optional<DateTime> option)
+            => option.Map<DateTime, DateTime?>(o => o);
 
         private static Optional<T?> MapToNullable<T>(this Optional<T> option) //where T : class
             => option.Map<T, T?>(o => o);

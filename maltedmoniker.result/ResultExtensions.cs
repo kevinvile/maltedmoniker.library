@@ -30,6 +30,12 @@ namespace maltedmoniker.result
                 ? await map(some)
             : result;
 
+        public static Optional<T> MapToOption<TResult, T>(this Result<TResult> result, Func<TResult, Optional<T>> mapper)
+            => result is Success<TResult> success ? mapper((TResult)success) : None.Value;
+
+        public static async Task<Optional<T>> MapToOptionAsync<TResult, T>(this Result<TResult> result, Func<TResult, Task<Optional<T>>> mapper)
+            => result is Success<TResult> success ? await mapper((TResult)success) : None.Value;
+
         public static async Task<Result<T>> DoWhenSuccessfulAsync<T>(this Result<T> result, Func<T, Task> map)
         {
             if (result is Success<T> some) await map(some);
@@ -69,7 +75,6 @@ namespace maltedmoniker.result
 
         public static Type GetType<T>(this Result<T> _)
             => typeof(T);
-
 
         public static Result<TResult> Map<TResult>(this Result result, Func<TResult> map)
             => result is Success 
