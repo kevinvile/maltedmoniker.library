@@ -78,7 +78,7 @@ namespace maltedmoniker.result
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), Content);
+            return base.GetHashCode() * Content?.GetHashCode() ?? 1;
         }
     }
 

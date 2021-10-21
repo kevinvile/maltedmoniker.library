@@ -19,7 +19,7 @@ namespace maltedmoniker.result
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Message);
+            return base.GetHashCode() * Message?.GetHashCode() ?? 1;
         }
     }
 

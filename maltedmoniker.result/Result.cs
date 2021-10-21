@@ -53,7 +53,7 @@ namespace maltedmoniker.result
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), Value);
+            return base.GetHashCode() * Value?.GetHashCode() ?? 1;
         }
 
         public bool Equals(Error? other)
@@ -127,7 +127,7 @@ namespace maltedmoniker.result
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), Value);
+            return base.GetHashCode() * Value?.GetHashCode() ?? 1;
         }
 
         public bool Equals(Error<T>? other)
@@ -164,7 +164,7 @@ namespace maltedmoniker.result
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), Content);
+            return base.GetHashCode() * Content?.GetHashCode() ?? 1;
         }
 
         public bool Equals(Success<T>? other)

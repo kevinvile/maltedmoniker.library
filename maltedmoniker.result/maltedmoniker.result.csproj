@@ -1,13 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+	  <TargetFramework>netstandard2.0</TargetFramework>
+	  <LangVersion>9</LangVersion>
     <Nullable>enable</Nullable>
-    <Version>1.0.9</Version>
+    <Version>1.1.0</Version>
     <Copyright>2021</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/kevinvile/maltedmoniker.library</PackageProjectUrl>
     <RepositoryUrl>https://github.com/kevinvile/maltedmoniker.library</RepositoryUrl>
   </PropertyGroup>
-
+	
 </Project>

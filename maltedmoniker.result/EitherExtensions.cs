@@ -10,7 +10,7 @@ namespace maltedmoniker.result
                 ? (Either<TL, TNewR>)map(right)
                 : (TL)(Left<TL, TR>)either;
 
-        public static async ValueTask<Either<TL, TNewR>> MapAsync<TL, TR, TNewR>(this Either<TL, TR> either, Func<TR, Task<TNewR>> map) 
+        public static async Task<Either<TL, TNewR>> MapAsync<TL, TR, TNewR>(this Either<TL, TR> either, Func<TR, Task<TNewR>> map) 
             => either is Right<TL, TR> right
                 ? (Either<TL, TNewR>)(await map(right))
                 : (TL)(Left<TL, TR>)either;
@@ -20,7 +20,7 @@ namespace maltedmoniker.result
                 ? map(right)
                 : (TL)(Left<TL, TR>)either;
 
-        public static async ValueTask<Either<TL, TNewR>> MapAsync<TL, TR, TNewR>(this Either<TL, TR> either, Func<TR, Task<Either<TL, TNewR>>> map) 
+        public static async Task<Either<TL, TNewR>> MapAsync<TL, TR, TNewR>(this Either<TL, TR> either, Func<TR, Task<Either<TL, TNewR>>> map) 
             => either is Right<TL, TR> right
                 ? await map(right)
                 : (TL)(Left<TL, TR>)either;
@@ -30,7 +30,7 @@ namespace maltedmoniker.result
                 ? map(left)
                 : (Right<TL, TR>)either;
 
-        public static async ValueTask<TR> ReduceAsync<TL, TR>(this Either<TL, TR> either, Func<TL, Task<TR>> map) 
+        public static async Task<TR> ReduceAsync<TL, TR>(this Either<TL, TR> either, Func<TL, Task<TR>> map) 
             => either is Left<TL, TR> left
                ? await map(left)
                : (Right<TL, TR>)either;
@@ -41,7 +41,7 @@ namespace maltedmoniker.result
                 ? map(bound)
                 : either;
 
-        public static async ValueTask<Either<TL, TR>> ReduceAsync<TL, TR>(this Either<TL, TR> either, Func<TL, Task<TR>> map, Func<TL, bool> mapWhen)
+        public static async Task<Either<TL, TR>> ReduceAsync<TL, TR>(this Either<TL, TR> either, Func<TL, Task<TR>> map, Func<TL, bool> mapWhen)
             => either is Left<TL, TR> bound && mapWhen(bound)
                 ? await map(bound)
                 : either;
