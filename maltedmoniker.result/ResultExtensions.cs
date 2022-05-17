@@ -106,6 +106,7 @@ namespace maltedmoniker.result
                 ? await map(success)
                 : result;
 
+        
         public static async Task<Result> DoWhenSuccessfulAsync(this Result result, Func<Task> map)
         {
             if (result is Success) await map();

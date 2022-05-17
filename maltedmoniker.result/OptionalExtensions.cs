@@ -73,6 +73,12 @@ namespace maltedmoniker.result
                 .MapToOption(value => Result<T>.Make(value))
                 .ReduceToValue(error);
 
+        public static Result<T> ToResult<T>(this Optional<Result<T>> optionalResult, string errorMessage)
+            => optionalResult.ReduceToValue(ResultsCustomError.Default(errorMessage));
+
+        public static Result ToResult(this Optional<Result> optionalResult, string errorMessage)
+            => optionalResult.ReduceToValue(ResultsCustomError.Default(errorMessage));
+
         private static Optional<DateTime?> MapToNullable(this Optional<DateTime> option)
             => option.Map<DateTime, DateTime?>(o => o);
 
