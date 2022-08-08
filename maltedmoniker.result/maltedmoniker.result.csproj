@@ -4,8 +4,8 @@
 	  <TargetFramework>netstandard2.0</TargetFramework>
 	  <LangVersion>9</LangVersion>
     <Nullable>enable</Nullable>
-    <Version>1.1.0</Version>
-    <Copyright>2021</Copyright>
+    <Version>1.1.1</Version>
+    <Copyright>2022</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/kevinvile/maltedmoniker.library</PackageProjectUrl>
     <RepositoryUrl>https://github.com/kevinvile/maltedmoniker.library</RepositoryUrl>

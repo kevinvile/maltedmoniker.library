@@ -83,6 +83,23 @@ namespace maltedmoniker.library.unittests
         }
 
         [Fact]
+        public void Result_Test6()
+        {
+            Result<Guid> r = Guid.NewGuid();
+            var result2 = (Result)r;
+            result2.Should().BeEquivalentTo(Result.Success());
+        }
+
+        [Fact]
+        public void Result_Test7()
+        {
+            var err = ResultsCustomError.Default("error");
+            Result<Guid> r = err;
+            var result2 = (Result)r;
+            result2.Should().BeEquivalentTo(new Error(err));
+        }
+
+        [Fact]
         public void Error_Test1()
         {
             Result r = ResultsCustomError.Default("");

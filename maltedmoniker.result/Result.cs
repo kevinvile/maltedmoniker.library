@@ -70,7 +70,7 @@ namespace maltedmoniker.result
 
     public class Success : Result
     {
-
+        
     }
 
     public abstract class Result<T> : IEquatable<Result<T>>
@@ -89,6 +89,10 @@ namespace maltedmoniker.result
 
         public static implicit operator Error(Result<T> result)
             => result is Error<T> err ? err : default!;
+
+        public static implicit operator Result(Result<T> result)
+            => result is Success<T> success 
+                ? (Success)success : (Error)result;
 
         public override bool Equals(object? obj)
         {
@@ -180,6 +184,9 @@ namespace maltedmoniker.result
 
         public static implicit operator T(Success<T> obj)
             => obj.Content;
+
+        public static implicit operator Success(Success<T> _)
+            => new ();
 
     }
 }
