@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace maltedmoniker.result
@@ -20,15 +22,20 @@ namespace maltedmoniker.result
                 ? map(some) 
                 : (ResultsError)(Error<T>)result;
 
+        //public static Result MapToResult<T, TResult>(this Result<T> result, Func<T, Result> map)
+        //    => result is Success<T> some
+        //        ? map(some)
+        //        : (ResultsError)(Error<T>)result;
+
         public static async Task<Result<TResult>> MapToResultAsync<T, TResult>(this Result<T> result, Func<T, Task<Result<TResult>>> map)
             => result is Success<T> some 
                 ? await map(some) 
             : (ResultsError)(Error<T>)result;
 
-        public static async Task<Result> MapToResultAsync<T, TResult>(this Result<T> result, Func<T, Task<Result>> map)
-            => result is Success<T> some
-                ? await map(some)
-            : result;
+        //public static async Task<Result> MapToResultAsync<T, TResult>(this Result<T> result, Func<T, Task<Result>> map)
+        //    => result is Success<T> some
+        //        ? await map(some)
+        //    : result;
 
         public static Optional<T> MapToOption<TResult, T>(this Result<TResult> result, Func<TResult, Optional<T>> mapper)
             => result is Success<TResult> success ? mapper((TResult)success) : None.Value;
@@ -96,7 +103,7 @@ namespace maltedmoniker.result
                 ? await map() 
                 : Result<TResult>.Error((Error)result);
 
-        public static Result MapToResultAsync<TResult>(this Result<TResult> result, Func<TResult, Result> map)
+        public static Result MapToResult<TResult>(this Result<TResult> result, Func<TResult, Result> map)
             => result is Success<TResult> success
                 ? map(success)
                 : result;
@@ -130,5 +137,34 @@ namespace maltedmoniker.result
             return result;
         }
 
+        public static Result Reduce(this IEnumerable<Result> results)
+        {
+            foreach(var result in results)
+            {
+                if (result is Error error) return error;
+            }
+
+            return Result.Success();
+        }
+
+        public static Result<T> Reduce<T>(this IEnumerable<Result> results, Func<T> onSuccess)
+        {
+            foreach (var result in results)
+            {
+                if (result is Error error) return Result<T>.Error(error);
+            }
+
+            return Result<T>.Make(onSuccess.Invoke());
+        }
+
+        public static Result<T> Reduce<T>(this IEnumerable<Result> results, T onSuccess)
+        {
+            foreach (var result in results)
+            {
+                if (result is Error error) return Result<T>.Error(error);
+            }
+
+            return Result<T>.Make(onSuccess);
+        }
     }
 }
