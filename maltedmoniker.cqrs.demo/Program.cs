@@ -1,9 +1,7 @@
 ﻿using maltedmoniker.cqrs.demo.Commands;
 using maltedmoniker.result;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace maltedmoniker.cqrs.demo

@@ -22,20 +22,10 @@ namespace maltedmoniker.result
                 ? map(some) 
                 : (ResultsError)(Error<T>)result;
 
-        //public static Result MapToResult<T, TResult>(this Result<T> result, Func<T, Result> map)
-        //    => result is Success<T> some
-        //        ? map(some)
-        //        : (ResultsError)(Error<T>)result;
-
         public static async Task<Result<TResult>> MapToResultAsync<T, TResult>(this Result<T> result, Func<T, Task<Result<TResult>>> map)
             => result is Success<T> some 
                 ? await map(some) 
             : (ResultsError)(Error<T>)result;
-
-        //public static async Task<Result> MapToResultAsync<T, TResult>(this Result<T> result, Func<T, Task<Result>> map)
-        //    => result is Success<T> some
-        //        ? await map(some)
-        //    : result;
 
         public static Optional<T> MapToOption<TResult, T>(this Result<TResult> result, Func<TResult, Optional<T>> mapper)
             => result is Success<TResult> success ? mapper((TResult)success) : None.Value;

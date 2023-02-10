@@ -24,7 +24,7 @@ namespace maltedmoniker.cqrs
                 .AddHandlers(assembly);
         
         private static IServiceCollection AddDispatcher(this IServiceCollection services)
-            => services.AddScoped<IDispatcher, Dispatcher>();
+            => services.AddTransient<IDispatcher, Dispatcher>();
 
         private static IServiceCollection AddHandlers(this IServiceCollection services, Assembly assembly)
             => services
@@ -37,7 +37,7 @@ namespace maltedmoniker.cqrs
         {
             foreach(var t in assembly.DefinedTypes.GetAbstractInterfacedMatchingTypes(type))
             {
-                services.AddScoped(t.GetInterfaces()[0], t);
+                services.AddTransient(t.GetInterfaces()[0], t);
             }
             return services;
         }
